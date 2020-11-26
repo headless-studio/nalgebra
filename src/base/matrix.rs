@@ -10,6 +10,9 @@ use std::hash::{Hash, Hasher};
 use std::marker::PhantomData;
 use std::mem;
 
+#[cfg(feature = "borsh-serialize")]
+use borsh::{BorshDeserialize, BorshSerialize};
+
 #[cfg(feature = "serde-serialize")]
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
@@ -200,6 +203,35 @@ where
             data: Default::default(),
             _phantoms: PhantomData,
         }
+    }
+}
+
+#[cfg(feature = "borsh-serialize")]
+impl<N, R, C, S> BorshSerialize for Matrix<N, R, C, S>
+where
+    N: Scalar,
+    R: Dim,
+    C: Dim,
+    S: BorshSerialize,
+{
+    fn serialize<W: std::io::Write>(&self, writer: &mut W) -> std::io::Result<()> {
+        self.data.serialize(writer)
+    }
+}
+
+#[cfg(feature = "borsh-serialize")]
+impl<N, R, C, S> BorshDeserialize for Matrix<N, R, C, S>
+where
+    N: Scalar,
+    R: Dim,
+    C: Dim,
+    S: BorshDeserialize,
+{
+    fn deserialize(buf: &mut &[u8]) -> std::io::Result<Self> {
+        S::deserialize(buf).map(|x| Matrix {
+            data: x,
+            _phantoms: PhantomData,
+        })
     }
 }
 

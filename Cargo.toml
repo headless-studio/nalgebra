@@ -24,6 +24,7 @@ default         = [ "std" ]
 std             = [ "matrixmultiply", "rand/std", "rand_distr", "simba/std" ]
 stdweb          = [ "rand/stdweb" ]
 arbitrary       = [ "quickcheck" ]
+borsh-serialize = [ "borsh" ]
 serde-serialize = [ "serde", "num-complex/serde" ]
 abomonation-serialize = [ "abomonation" ]
 sparse = [ ]
@@ -38,6 +39,7 @@ libm-force = [ "simba/libm_force" ]
 [dependencies]
 typenum        = "1.12"
 generic-array  = "0.14"
+borsh          = { version = "0.7", optional = true }
 rand           = { version = "0.7", default-features = false }
 num-traits     = { version = "0.2", default-features = false }
 num-complex    = { version = "0.3", default-features = false }
